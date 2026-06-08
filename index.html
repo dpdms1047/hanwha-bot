@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한화만 물어보세요</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--orange:#F47920;--sky:#00AFF0;--sky-dark:#0078B8;--sidebar:#2B2B2B;--hover:#3a3a3a;--active:#0078D4;--online:#92C353;--away:#FFA500;}
+body{font-family:'Noto Sans KR',sans-serif;background:#E0E0E0;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:16px;}
+.banner{width:100%;max-width:960px;background:linear-gradient(135deg,#1a1a1a,#2a2a2a);border-radius:10px 10px 0 0;padding:12px 20px;display:flex;align-items:center;gap:10px;}
+.badge{background:var(--orange);color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;}
+.banner span{color:#aaa;font-size:12px;}
+.banner strong{color:var(--orange);}
+.wrap{width:100%;max-width:960px;display:flex;height:640px;background:#fff;border-radius:0 0 10px 10px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.2);}
+.sidebar{width:230px;background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;}
+.sb-top{padding:11px;border-bottom:1px solid #3a3a3a;}
+.my-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;position:relative;}
+.dot{position:absolute;bottom:0;right:0;width:8px;height:8px;border-radius:50%;border:2px solid var(--sidebar);}
+.my-name{font-size:12px;color:#fff;font-weight:500;}
+.my-status{font-size:10px;color:#888;}
+.sb-search{width:100%;background:#3a3a3a;border:none;border-radius:4px;padding:5px 8px;color:#ccc;font-size:11px;font-family:'Noto Sans KR',sans-serif;outline:none;}
+.sb-search::placeholder{color:#666;}
+.sb-body{flex:1;overflow-y:auto;padding-bottom:8px;}
+.sb-body::-webkit-scrollbar{width:3px;}
+.sb-body::-webkit-scrollbar-thumb{background:#444;border-radius:2px;}
+.dept-lbl{display:flex;align-items:center;gap:5px;padding:6px 10px;color:#aaa;font-size:10px;font-weight:700;letter-spacing:.5px;cursor:pointer;}
+.dept-lbl:hover{color:#ddd;}
+.dept-lbl .arr{font-size:8px;transition:transform .2s;display:inline-block;}
+.tree-dept.open>.dept-lbl .arr{transform:rotate(90deg);}
+.dept-children{display:none;padding-left:6px;}
+.tree-dept.open>.dept-children{display:block;}
+.hon-lbl{display:flex;align-items:center;gap:5px;padding:4px 10px 4px 14px;color:#999;font-size:10px;font-weight:600;cursor:pointer;}
+.hon-lbl:hover{color:#ddd;}
+.hon-lbl .arr{font-size:8px;transition:transform .2s;display:inline-block;}
+.tree-hon.open>.hon-lbl .arr{transform:rotate(90deg);}
+.hon-children{display:none;padding-left:6px;}
+.tree-hon.open>.hon-children{display:block;}
+.bu-lbl{display:flex;align-items:center;gap:5px;padding:4px 10px 4px 24px;color:#bbb;font-size:11px;cursor:pointer;transition:background .15s,color .15s;}
+.bu-lbl:hover{background:var(--hover);color:#fff;}
+.bu-lbl .arr{font-size:8px;transition:transform .2s;display:inline-block;margin-left:auto;}
+.tree-bu.open>.bu-lbl .arr{transform:rotate(90deg);}
+.bu-children{display:none;}
+.tree-bu.open>.bu-children{display:block;}
+.ci{display:flex;align-items:center;gap:7px;padding:4px 10px 4px 30px;cursor:pointer;transition:background .15s;}
+.ci:hover{background:var(--hover);}
+.ci.active{background:var(--active);}
+.ci-name{font-size:11px;color:#ccc;}
+.ci.active .ci-name{color:#fff;}
+.ci-role{font-size:10px;color:#666;}
+.ci.active .ci-role{color:#aad4ff;}
+.bot-item{display:flex;align-items:center;gap:7px;padding:5px 10px 5px 30px;cursor:pointer;transition:background .15s;border-top:1px solid #3a3a3a;margin-top:2px;}
+.bot-item:hover{background:var(--hover);}
+.bot-item.active{background:var(--active);}
+.bot-av{width:24px;height:24px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;position:relative;}
+.bot-av .dot{background:var(--sky);}
+.bot-nm{font-size:11px;font-weight:600;color:var(--orange);}
+.bot-item.active .bot-nm{color:#ffd090;}
+.bot-sb{font-size:10px;color:#666;}
+.bot-item.active .bot-sb{color:#aad4ff;}
+.main{flex:1;display:flex;flex-direction:column;min-width:0;}
+.chat-hdr{padding:11px 14px;border-bottom:1px solid #e8e8e8;background:#fafafa;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.ch-name{font-size:13px;font-weight:700;color:#1C1C1C;display:flex;align-items:center;gap:5px;}
+.bot-tag{background:var(--sky);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;}
+.ch-sub{font-size:10px;color:#888;margin-top:1px;}
+.ch-acts{margin-left:auto;display:flex;gap:5px;}
+.ch-btn{width:26px;height:26px;border-radius:4px;background:none;border:1px solid #ddd;cursor:pointer;font-size:12px;color:#666;display:flex;align-items:center;justify-content:center;}
+.ch-btn:hover{background:#f0f0f0;}
+.msgs{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px;background:#fff;}
+.msgs::-webkit-scrollbar{width:4px;}
+.msgs::-webkit-scrollbar-thumb{background:#ddd;border-radius:2px;}
+.date-d{text-align:center;font-size:10px;color:#bbb;position:relative;margin:2px 0;}
+.date-d::before,.date-d::after{content:'';position:absolute;top:50%;width:calc(50% - 50px);height:1px;background:#eee;}
+.date-d::before{left:0;}.date-d::after{right:0;}
+.msg-row{display:flex;gap:7px;align-items:flex-end;animation:fu .2s ease both;}
+.msg-row.user{flex-direction:row-reverse;}
+@keyframes fu{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+.msg-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;align-self:flex-end;}
+.msg-av.bot{background:var(--orange);}
+.msg-av.user{background:#0078D4;}
+.msg-meta{display:flex;flex-direction:column;}
+.msg-row.user .msg-meta{align-items:flex-end;}
+.bubble{max-width:72%;padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.65;}
+.msg-row.bot .bubble{background:#F4F4F4;color:#1C1C1C;border-bottom-left-radius:3px;}
+.msg-row.user .bubble{background:#0078D4;color:#fff;border-bottom-right-radius:3px;}
+.msg-time{font-size:9px;color:#bbb;margin-top:2px;padding:0 2px;}
+.msg-row.user .msg-time{text-align:right;}
+.esc-btn{background:#fff;border:1.5px solid var(--orange);color:var(--orange);border-radius:7px;padding:5px 11px;font-size:11px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;font-weight:600;display:inline-flex;align-items:center;gap:4px;margin-top:7px;transition:all .15s;}
+.esc-btn:hover{background:var(--orange);color:#fff;}
+.esc-btn:disabled{opacity:.5;cursor:default;}
+.typing-row{display:flex;gap:7px;align-items:flex-end;}
+.t-dots{display:flex;gap:3px;padding:9px 12px;background:#F4F4F4;border-radius:12px;border-bottom-left-radius:3px;}
+.t-dots span{width:5px;height:5px;background:#bbb;border-radius:50%;animation:bn 1.2s infinite;}
+.t-dots span:nth-child(2){animation-delay:.2s;}
+.t-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes bn{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-4px);}}
+.inp-area{border-top:1px solid #e8e8e8;padding:9px 13px 11px;background:#fafafa;flex-shrink:0;}
+.inp-row{display:flex;gap:7px;align-items:flex-end;}
+#uInput{flex:1;border:1.5px solid #ddd;border-radius:7px;padding:8px 12px;font-size:13px;font-family:'Noto Sans KR',sans-serif;outline:none;resize:none;background:#fff;color:#1C1C1C;line-height:1.5;min-height:38px;max-height:90px;transition:border-color .15s;}
+#uInput:focus{border-color:var(--sky);}
+#uInput::placeholder{color:#bbb;}
+.send-btn{width:38px;height:38px;background:var(--sky);border:none;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s;}
+.send-btn:hover{background:var(--sky-dark);}
+.send-btn svg{width:16px;height:16px;fill:#fff;}
+</style>
+</head>
+<body>
+
+<div class="banner">
+  <span class="badge">DEMO</span>
+  <span>조직도에서 부서원 아래 <strong>「한화만 물어보세요」</strong>를 클릭해보세요</span>
+</div>
+
+<div class="wrap">
+  <div class="sidebar">
+    <div class="sb-top">
+      <div class="my-row">
+        <div class="av" style="background:#0078D4">나<div class="dot" style="background:var(--online)"></div></div>
+        <div><div class="my-name">김한화</div><div class="my-status">사용 가능</div></div>
+      </div>
+      <input class="sb-search" placeholder="🔍 사람, 그룹 검색">
+    </div>
+    <div class="sb-body">
+
+      <!-- 기업보험부문 -->
+      <div class="tree-dept open" id="d1">
+        <div class="dept-lbl" onclick="tog('d1')"><span class="arr">▶</span>🏢 기업보험부문</div>
+        <div class="dept-children">
+          <div class="tree-hon open" id="h1">
+            <div class="hon-lbl" onclick="tog('h1');event.stopPropagation()"><span class="arr">▶</span>📁 기업영업1본부</div>
+            <div class="hon-children">
+              <!-- 해운항공영업부 -->
+              <div class="tree-bu open" id="bu2">
+                <div class="bu-lbl" onclick="tog('bu2');event.stopPropagation()">📂 해운항공영업부<span class="arr">▶</span></div>
+                <div class="bu-children">
+                  <div class="ci" onclick="selCI(this)"><div class="av" style="background:#1A5276;width:24px;height:24px;font-size:10px">김<div class="dot" style="background:var(--online)"></div></div><div><div class="ci-name">김부장</div><div class="ci-role">부장</div></div></div>
+                  <div class="ci" onclick="selCI(this)"><div class="av" style="background:#1F618D;width:24px;height:24px;font-size:10px">최<div class="dot" style="background:var(--online)"></div></div><div><div class="ci-name">최차장</div><div class="ci-role">차장</div></div></div>
+                  <div class="ci" onclick="selCI(this)"><div class="av" style="background:#2471A3;width:24px;height:24px;font-size:10px">안<div class="dot" style="background:var(--online)"></div></div><div><div class="ci-name">안과장</div><div class="ci-role">과장</div></div></div>
+                  <div class="ci" onclick="selCI(this)"><div class="av" style="background:#2E86C1;width:24px;height:24px;font-size:10px">고<div class="dot" style="background:var(--away)"></div></div><div><div class="ci-name">고대리</div><div class="ci-role">대리</div></div></div>
+                  <div class="ci" onclick="selCI(this)"><div class="av" style="background:#3498DB;width:24px;height:24px;font-size:10px">조<div class="dot" style="background:var(--online)"></div></div><div><div class="ci-name">조사원</div><div class="ci-role">사원</div></div></div>
+                  <div class="bot-item active" id="botHae" onclick="selBot('해운항공영업부','조사원');event.stopPropagation()">
+                    <div class="bot-av">봇<div class="dot"></div></div>
+                    <div><div class="bot-nm">한화만 물어보세요</div><div class="bot-sb">해운항공영업부 · AI</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 경영지원실 -->
+      <div class="tree-dept open" id="d2">
+        <div class="dept-lbl" onclick="tog('d2')"><span class="arr">▶</span>🏢 경영지원실</div>
+        <div class="dept-children">
+
+          <!-- 인사팀 -->
+          <div class="tree-hon open" id="h2">
+            <div class="hon-lbl" onclick="tog('h2');event.stopPropagation()"><span class="arr">▶</span>📁 인사팀</div>
+            <div class="hon-children">
+              <div class="tree-bu open" id="bu3">
+                <div class="bu-lbl" onclick="tog('bu3');event.stopPropagation()">📂 인사파트<span class="arr">▶</span></div>
+                <div class="bu-children">
+                  <div class="ci" onclick="selCI(this)"><div class="av" style="background:#6C3483;width:24px;height:24px;font-size:10px">이<div class="dot" style="background:var(--online)"></div></div><div><div class="ci-name">이파트장</div><div class="ci-role">파트장</div></div></div>
+                  <div class="ci" onclick="selCI(this)"><div class="av" style="background:#7D3C98;width:24px;height:24px;font-size:10px">박<div class="dot" style="background:var(--online)"></div></div><div><div class="ci-name">박차장</div><div class="ci-role">차장</div></div></div>
+                  <div class="ci" onclick="selCI(this)"><div class="av" style="background:#884EA0;width:24px;height:24px;font-size:10px">김<div class="dot" style="background:var(--away)"></div></div><div><div class="ci-name">김과장</div><div class="ci-role">과장</div></div></div>
+                  <div class="ci" onclick="selCI(this)"><div class="av" style="background:#9B59B6;width:24px;height:24px;font-size:10px">김<div class="dot" style="background:var(--online)"></div></div><div><div class="ci-name">김주임</div><div class="ci-role">주임</div></div></div>
+                  <div class="ci" onclick="selCI(this)"><div class="av" style="background:#A569BD;width:24px;height:24px;font-size:10px">정<div class="dot" style="background:var(--online)"></div></div><div><div class="ci-name">정사원</div><div class="ci-role">사원</div></div></div>
+                  <div class="bot-item" id="botInsa" onclick="selBot('인사파트','이파트장');event.stopPropagation()">
+                    <div class="bot-av">봇<div class="dot"></div></div>
+                    <div><div class="bot-nm">한화만 물어보세요</div><div class="bot-sb">인사파트 · AI</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 운영지원팀 -->
+          <div class="tree-hon open" id="h3">
+            <div class="hon-lbl" onclick="tog('h3');event.stopPropagation()"><span class="arr">▶</span>📁 운영지원팀</div>
+            <div class="hon-children">
+              <div class="tree-bu open" id="bu4">
+                <div class="bu-lbl" onclick="tog('bu4');event.stopPropagation()">📂 사업운영지원파트<span class="arr">▶</span></div>
+                <div class="bu-children">
+                  <div class="ci" onclick="selCI(this)"><div class="av" style="background:#0E6655;width:24px;height:24px;font-size:10px">윤<div class="dot" style="background:var(--online)"></div></div><div><div class="ci-name">윤파트장</div><div class="ci-role">파트장</div></div></div>
+                  <div class="ci" onclick="selCI(this)"><div class="av" style="background:#117A65;width:24px;height:24px;font-size:10px">김<div class="dot" style="background:var(--online)"></div></div><div><div class="ci-name">김차장</div><div class="ci-role">차장</div></div></div>
+                  <div class="ci" onclick="selCI(this)"><div class="av" style="background:#148F77;width:24px;height:24px;font-size:10px">원<div class="dot" style="background:var(--online)"></div></div><div><div class="ci-name">원과장</div><div class="ci-role">과장</div></div></div>
+                  <div class="ci" onclick="selCI(this)"><div class="av" style="background:#17A589;width:24px;height:24px;font-size:10px">서<div class="dot" style="background:var(--away)"></div></div><div><div class="ci-name">서대리</div><div class="ci-role">대리</div></div></div>
+                  <div class="ci" onclick="selCI(this)"><div class="av" style="background:#1ABC9C;width:24px;height:24px;font-size:10px">김<div class="dot" style="background:var(--online)"></div></div><div><div class="ci-name">김사원</div><div class="ci-role">사원</div></div></div>
+                  <div class="bot-item" id="botOps" onclick="selBot('사업운영지원파트','윤파트장');event.stopPropagation()">
+                    <div class="bot-av">봇<div class="dot"></div></div>
+                    <div><div class="bot-nm">한화만 물어보세요</div><div class="bot-sb">사업운영지원파트 · AI</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="chat-hdr">
+      <div class="bot-av" style="width:34px;height:34px;font-size:12px">봇<div class="dot" style="border-color:#fafafa;width:9px;height:9px"></div></div>
+      <div>
+        <div class="ch-name">한화만 물어보세요 <span class="bot-tag">AI 봇</span></div>
+        <div class="ch-sub" id="chSub">해운항공영업부 · 자동응답 챗봇</div>
+      </div>
+      <div class="ch-acts">
+        <button class="ch-btn">📞</button>
+        <button class="ch-btn">🎥</button>
+        <button class="ch-btn">⋯</button>
+      </div>
+    </div>
+    <div class="msgs" id="msgs">
+      <div class="date-d">오늘</div>
+      <div class="msg-row bot">
+        <div class="msg-av bot">봇</div>
+        <div class="msg-meta">
+          <div class="bubble">안녕하세요! 👋<br><b>해운항공영업부</b> 전담 AI 챗봇입니다.<br>궁금한 점을 편하게 물어보세요!</div>
+          <div class="msg-time">오전 9:00</div>
+        </div>
+      </div>
+    </div>
+    <div class="inp-area">
+      <div class="inp-row">
+        <textarea id="uInput" placeholder="메시지를 입력하세요... (Enter 전송)" rows="1"
+          onkeydown="hKey(event)" oninput="aR(this)"></textarea>
+        <button class="send-btn" onclick="sendMsg()">
+          <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const FAQ=[
+  {intent:"적하보험수납",question:"적하보험 수납은 어떻게 하나요?",answer:"적하보험 수납 방법 안내드릴게요! 📋\n\n① <b>미수영수증</b> 화면에서 증권번호 또는 계약자 조회\n② 대상 건 선택 후 하단 <b>영수증발행 없음</b> 클릭\n③ <b>영수일시</b> = 입금일시 입력 후 수납 클릭\n④ <b>원수수납(외화/미수)</b> 화면에서 계약사항 선택 → 입금입력 선택 후 잔액 <b>0원 일치 확인</b> → 수납",dept:"해운항공영업부",contact:"조한화"},
+  {intent:"콘도지원금",question:"콘도 지원금은 언제 입금되나요?",answer:"콘도 지원금 입금 일정이에요! 🏖️\n\n콘도 <b>사용일 익월 급여일</b>에 입금됩니다.\n\n예) 6월 15일 사용 → 7월 21일 급여일에 입금",dept:"사업운영지원파트",contact:"김한화"},
+  {intent:"연차체력단련",question:"연차를 체력단련휴가로 바꾸고 싶어요",answer:"연차 → 체력단련휴가 변경 방법이에요! 🏃\n\n① <b>기존 연차 취소 신청</b>\n② <b>체력단련휴가로 연차 신청</b>을 새롭게 올리시면 됩니다.\n\n⚠️ 취소 후 재신청 순서를 꼭 지켜주세요!",dept:"인사파트",contact:"이한화"},
+  {intent:"콘도신청",question:"콘도 신청은 언제부터 가능해요?",answer:"콘도 신청 방법 안내드릴게요! 🏨\n\n신청 가능 시기: 사용일 <b>6개월 전부터</b>\n\n신청 경로: 써클 → 지원 업무 → <b>콘도 신청</b>",dept:"사업운영지원파트",contact:"김한화"},
+  {intent:"급여일",question:"급여일 언제예요?",answer:"급여 입금 일정이에요! 💰\n\n매월 <b>21일</b>에 입금됩니다.\n\n주말/공휴일인 경우 <b>전일</b>에 미리 입금돼요.",dept:"인사파트",contact:"이한화"},
+];
+let curDept="해운항공영업부",curContact="조한화";
+function tog(id){document.getElementById(id).classList.toggle('open');}
+function selCI(el){document.querySelectorAll('.ci,.bot-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');}
+function selBot(dept,contact){curDept=dept;curContact=contact;document.querySelectorAll('.ci,.bot-item').forEach(i=>i.classList.remove('active'));event.currentTarget.classList.add('active');document.getElementById('chSub').textContent=`${dept} · 자동응답 챗봇`;}
+function nowTime(){const n=new Date(),h=n.getHours(),m=String(n.getMinutes()).padStart(2,'0');return `${h<12?'오전':'오후'} ${h%12||12}:${m}`;}
+function addMsg(html,type){
+  const c=document.getElementById('msgs');
+  const row=document.createElement('div');row.className=`msg-row ${type}`;
+  const av=document.createElement('div');av.className=`msg-av ${type}`;av.textContent=type==='bot'?'봇':'나';
+  const meta=document.createElement('div');meta.className='msg-meta';
+  const bubble=document.createElement('div');bubble.className='bubble';bubble.innerHTML=html.replace(/\n/g,'<br>');
+  const time=document.createElement('div');time.className='msg-time';time.textContent=nowTime();
+  meta.appendChild(bubble);meta.appendChild(time);row.appendChild(av);row.appendChild(meta);
+  c.appendChild(row);c.scrollTop=c.scrollHeight;return bubble;
+}
+function showTyping(){const c=document.getElementById('msgs');const row=document.createElement('div');row.className='typing-row';row.id='typing';const av=document.createElement('div');av.className='msg-av bot';av.textContent='봇';const dots=document.createElement('div');dots.className='t-dots';dots.innerHTML='<span></span><span></span><span></span>';row.appendChild(av);row.appendChild(dots);c.appendChild(row);c.scrollTop=c.scrollHeight;}
+function hideTyping(){const el=document.getElementById('typing');if(el)el.remove();}
+async function findIntent(text){
+  const faqList=FAQ.map((f,i)=>`[${i}] ${f.intent}: "${f.question}"`).join('\n');
+  const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userText:text,faqList})});
+  if(!res.ok) throw new Error();
+  const data=await res.json();
+  if(data.index!==null&&data.index>=0&&data.index<FAQ.length) return FAQ[data.index];
+  return null;
+}
+async function process(text){
+  addMsg(text,'user');showTyping();
+  try{
+    const faq=await findIntent(text);hideTyping();
+    if(faq){
+      addMsg(faq.answer,'bot');
+      setTimeout(()=>{const b=addMsg('해결되셨나요? 😊<br>더 궁금한 점이 있으시면 담당자에게 연결해드릴게요.','bot');const btn=document.createElement('button');btn.className='esc-btn';btn.innerHTML=`📨 <b>${faq.dept}</b> ${faq.contact}님께 연결`;btn.onclick=()=>esc(faq.dept,faq.contact,btn);b.appendChild(btn);},600);
+    } else {
+      const b=addMsg('FAQ에 등록되지 않은 내용이에요.<br>담당자에게 직접 연결해드릴게요! 📨','bot');
+      setTimeout(()=>{const btn=document.createElement('button');btn.className='esc-btn';btn.innerHTML=`📨 <b>${curDept}</b> 담당자에게 연결`;btn.onclick=()=>esc(curDept,curContact,btn);b.appendChild(btn);},400);
+    }
+  }catch(e){hideTyping();addMsg('일시적 오류가 발생했어요. 잠시 후 다시 시도해주세요.','bot');}
+}
+function esc(dept,contact,btn){btn.disabled=true;btn.innerHTML=`✅ ${contact}님께 전달 완료!`;setTimeout(()=>{addMsg(`📨 <b>${contact}님 (${dept})</b>께 문의 내용을 전달했습니다.<br>잠시 후 직접 연락이 올 거예요!`,'bot');},400);}
+function sendMsg(){const inp=document.getElementById('uInput');const t=inp.value.trim();if(!t)return;inp.value='';inp.style.height='auto';process(t);}
+function hKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
+function aR(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,90)+'px';}
+</script>
+</body>
+</html>
