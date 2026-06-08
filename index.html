@@ -240,11 +240,26 @@ body{font-family:'Noto Sans KR',sans-serif;background:#E0E0E0;display:flex;flex-
 
 <script>
 const FAQ=[
-  {intent:"적하보험수납",question:"적하보험 수납은 어떻게 하나요?",answer:"적하보험 수납 방법 안내드릴게요! 📋\n\n① <b>미수영수증</b> 화면에서 증권번호 또는 계약자 조회\n② 대상 건 선택 후 하단 <b>영수증발행 없음</b> 클릭\n③ <b>영수일시</b> = 입금일시 입력 후 수납 클릭\n④ <b>원수수납(외화/미수)</b> 화면에서 계약사항 선택 → 입금입력 선택 후 잔액 <b>0원 일치 확인</b> → 수납",dept:"해운항공영업부",contact:"조한화"},
-  {intent:"콘도지원금",question:"콘도 지원금은 언제 입금되나요?",answer:"콘도 지원금 입금 일정이에요! 🏖️\n\n콘도 <b>사용일 익월 급여일</b>에 입금됩니다.\n\n예) 6월 15일 사용 → 7월 21일 급여일에 입금",dept:"사업운영지원파트",contact:"김한화"},
-  {intent:"연차체력단련",question:"연차를 체력단련휴가로 바꾸고 싶어요",answer:"연차 → 체력단련휴가 변경 방법이에요! 🏃\n\n① <b>기존 연차 취소 신청</b>\n② <b>체력단련휴가로 연차 신청</b>을 새롭게 올리시면 됩니다.\n\n⚠️ 취소 후 재신청 순서를 꼭 지켜주세요!",dept:"인사파트",contact:"이한화"},
-  {intent:"콘도신청",question:"콘도 신청은 언제부터 가능해요?",answer:"콘도 신청 방법 안내드릴게요! 🏨\n\n신청 가능 시기: 사용일 <b>6개월 전부터</b>\n\n신청 경로: 써클 → 지원 업무 → <b>콘도 신청</b>",dept:"사업운영지원파트",contact:"김한화"},
-  {intent:"급여일",question:"급여일 언제예요?",answer:"급여 입금 일정이에요! 💰\n\n매월 <b>21일</b>에 입금됩니다.\n\n주말/공휴일인 경우 <b>전일</b>에 미리 입금돼요.",dept:"인사파트",contact:"이한화"},
+  {intent:"적하보험수납",
+   keywords:["적하보험","수납","보험수납","적하보험수납","수납방법","증권번호","계약자","미수영수증","원수수납","적하","보험 수납"],
+   answer:"적하보험 수납 방법 안내드릴게요! 📋\n\n① <b>미수영수증</b> 화면에서 증권번호 또는 계약자 조회\n② 대상 건 선택 후 하단 <b>영수증발행 없음</b> 클릭\n③ <b>영수일시</b> = 입금일시 입력 후 수납 클릭\n④ <b>원수수납(외화/미수)</b> 화면에서 계약사항 선택 → 입금입력 선택 후 잔액 <b>0원 일치 확인</b> → 수납",
+   dept:"해운항공영업부",contact:"조사원"},
+  {intent:"콘도지원금",
+   keywords:["콘도지원금","콘도 지원","지원금","콘도비","콘도 돈","콘도 언제 들어","콘도 입금","콘도지원","콘도돈"],
+   answer:"콘도 지원금 입금 일정이에요! 🏖️\n\n콘도 <b>사용일 익월 급여일</b>에 입금됩니다.\n\n예) 6월 15일 사용 → 7월 21일 급여일에 입금",
+   dept:"사업운영지원파트",contact:"윤파트장"},
+  {intent:"연차체력단련",
+   keywords:["체력단련","체력단련휴가","연차 바꾸","연차 변경","체단","휴가 종류","체력단련으로","연차를 체력","체력단련 신청","휴가변경","연차변경"],
+   answer:"연차 → 체력단련휴가 변경 방법이에요! 🏃\n\n① <b>기존 연차 취소 신청</b>\n② <b>체력단련휴가로 연차 신청</b>을 새롭게 올리시면 됩니다.\n\n⚠️ 취소 후 재신청 순서를 꼭 지켜주세요!",
+   dept:"인사파트",contact:"이파트장"},
+  {intent:"콘도신청",
+   keywords:["콘도신청","콘도 예약","콘도 어떻게","콘도 신청 방법","써클","콘도 언제부터","콘도 어디서","콘도신청방법"],
+   answer:"콘도 신청 방법 안내드릴게요! 🏨\n\n<b>신청 가능 시기:</b> 사용일 <b>6개월 전부터</b>\n\n<b>신청 경로:</b>\n써클 → 지원 업무 → <b>콘도 신청</b>\n\n조기 마감될 수 있으니 미리 신청하세요!",
+   dept:"사업운영지원파트",contact:"윤파트장"},
+  {intent:"급여일",
+   keywords:["급여일","급여","월급","월급날","월급 언제","급여 언제","임금","이번달 월급","월급날 언제","급여일 언제","월급때","급여때"],
+   answer:"급여 입금 일정이에요! 💰\n\n매월 <b>21일</b>에 입금됩니다.\n\n주말/공휴일인 경우 <b>전일</b>에 미리 입금돼요.\n\n예) 21일이 일요일이면 → 금요일 19일 입금",
+   dept:"인사파트",contact:"이파트장"},
 ];
 let curDept="해운항공영업부",curContact="조한화";
 function tog(id){document.getElementById(id).classList.toggle('open');}
@@ -263,18 +278,20 @@ function addMsg(html,type){
 }
 function showTyping(){const c=document.getElementById('msgs');const row=document.createElement('div');row.className='typing-row';row.id='typing';const av=document.createElement('div');av.className='msg-av bot';av.textContent='봇';const dots=document.createElement('div');dots.className='t-dots';dots.innerHTML='<span></span><span></span><span></span>';row.appendChild(av);row.appendChild(dots);c.appendChild(row);c.scrollTop=c.scrollHeight;}
 function hideTyping(){const el=document.getElementById('typing');if(el)el.remove();}
-async function findIntent(text){
-  const faqList=FAQ.map((f,i)=>`[${i}] ${f.intent}: "${f.question}"`).join('\n');
-  const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userText:text,faqList})});
-  if(!res.ok) throw new Error();
-  const data=await res.json();
-  if(data.index!==null&&data.index>=0&&data.index<FAQ.length) return FAQ[data.index];
+function findIntent(text){
+  const t = text.toLowerCase().replace(/\s/g,'');
+  for(const f of FAQ){
+    for(const kw of f.keywords){
+      if(t.includes(kw.toLowerCase().replace(/\s/g,''))) return f;
+    }
+  }
   return null;
 }
-async function process(text){
+function process(text){
   addMsg(text,'user');showTyping();
-  try{
-    const faq=await findIntent(text);hideTyping();
+  setTimeout(()=>{
+    hideTyping();
+    const faq=findIntent(text);
     if(faq){
       addMsg(faq.answer,'bot');
       setTimeout(()=>{const b=addMsg('해결되셨나요? 😊<br>더 궁금한 점이 있으시면 담당자에게 연결해드릴게요.','bot');const btn=document.createElement('button');btn.className='esc-btn';btn.innerHTML=`📨 <b>${faq.dept}</b> ${faq.contact}님께 연결`;btn.onclick=()=>esc(faq.dept,faq.contact,btn);b.appendChild(btn);},600);
@@ -282,7 +299,8 @@ async function process(text){
       const b=addMsg('FAQ에 등록되지 않은 내용이에요.<br>담당자에게 직접 연결해드릴게요! 📨','bot');
       setTimeout(()=>{const btn=document.createElement('button');btn.className='esc-btn';btn.innerHTML=`📨 <b>${curDept}</b> 담당자에게 연결`;btn.onclick=()=>esc(curDept,curContact,btn);b.appendChild(btn);},400);
     }
-  }catch(e){hideTyping();addMsg('일시적 오류가 발생했어요. 잠시 후 다시 시도해주세요.','bot');}
+  }, 700 + Math.random()*400);
+}
 }
 function esc(dept,contact,btn){btn.disabled=true;btn.innerHTML=`✅ ${contact}님께 전달 완료!`;setTimeout(()=>{addMsg(`📨 <b>${contact}님 (${dept})</b>께 문의 내용을 전달했습니다.<br>잠시 후 직접 연락이 올 거예요!`,'bot');},400);}
 function sendMsg(){const inp=document.getElementById('uInput');const t=inp.value.trim();if(!t)return;inp.value='';inp.style.height='auto';process(t);}
